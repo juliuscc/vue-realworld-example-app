@@ -46,10 +46,7 @@
         <div class="col-md-3">
           <div class="sidebar">
             <p>Popular Tags</p>
-            <div class="tag-list">
-              <RwvTag v-for="(tag, index) in tags" :name="tag" :key="index">
-              </RwvTag>
-            </div>
+            <Tags v-bind:childProps="{ tags, onClick: routeTo }" />
           </div>
         </div>
       </div>
@@ -59,13 +56,13 @@
 
 <script>
 import { mapGetters } from "vuex";
-import RwvTag from "@/components/VTag";
+import Tags from "plutt-tags/build/proxy/vue";
 import { FETCH_TAGS } from "@/store/actions.type";
 
 export default {
   name: "home",
   components: {
-    RwvTag
+    Tags
   },
   mounted() {
     this.$store.dispatch(FETCH_TAGS);
@@ -74,6 +71,11 @@ export default {
     ...mapGetters(["isAuthenticated", "tags"]),
     tag() {
       return this.$route.params.tag;
+    }
+  },
+  methods: {
+    routeTo(tag) {
+      this.$router.push({ name: "home-tag", params: { tag } });
     }
   }
 };
